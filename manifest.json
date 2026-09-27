@@ -1,0 +1,32 @@
+{
+  "name": "L'Arsenale - Database Vini",
+  "short_name": "Arsenale Vini",
+  "description": "Database consultabile di 101 vini italiani, filtrabili per tipologia e regione, con cantina, prezzo indicativo e descrizione.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#140a0c",
+  "theme_color": "#140a0c",
+  "lang": "it",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
