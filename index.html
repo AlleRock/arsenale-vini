@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<title>Arsenale Vini</title>
+<meta name="theme-color" content="#140a0c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Arsenale Vini">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#140a0c;
+    --bg-elev:#1d1013;
+    --card:#251519;
+    --card-hi:#2e181d;
+    --line:#3a2228;
+    --text:#f2e8de;
+    --text-dim:#a8938a;
+    --gold:#c69a3d;
+    --gold-dim:#8a7134;
+    --bianco:#cbb35a;
+    --rosato:#d98fa3;
+    --rosso:#a5384a;
+    --bollicina:#e8c96a;
+    --dolce:#c9812f;
+    --radius:14px;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',system-ui,sans-serif;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+    overscroll-behavior-y:none;
+  }
+  .serif{font-family:'Fraunces',serif;}
+
+  header.app{
+    position:sticky; top:0; z-index:10;
+    padding:calc(env(safe-area-inset-top,0px) + 18px) 20px 14px;
+    background:linear-gradient(180deg, var(--bg) 70%, transparent);
+  }
+  header.app h1{
+    margin:0 0 2px;
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:26px;
+    letter-spacing:0.2px;
+  }
+  header.app .sub{
+    color:var(--text-dim);
+    font-size:13px;
+    margin-bottom:14px;
+  }
+  .search-wrap{
+    position:relative;
+  }
+  .search-wrap input{
+    width:100%;
+    background:var(--bg-elev);
+    border:1px solid var(--line);
+    color:var(--text);
+    border-radius:12px;
+    padding:12px 14px 12px 38px;
+    font-size:15px;
+    font-family:'Inter',sans-serif;
+  }
+  .search-wrap input::placeholder{color:var(--text-dim);}
+  .search-wrap input:focus{outline:none; border-color:var(--gold-dim);}
+  .search-wrap .icon{
+    position:absolute; left:12px; top:50%; transform:translateY(-50%);
+    color:var(--text-dim); font-size:15px; pointer-events:none;
+  }
+
+  .filters{
+    display:flex; gap:8px; overflow-x:auto; padding:14px 20px 4px;
+    scrollbar-width:none;
+  }
+  .filters::-webkit-scrollbar{display:none;}
+  .chip{
+    flex:none;
+    padding:7px 14px;
+    border-radius:100px;
+    border:1px solid var(--line);
+    background:var(--bg-elev);
+    color:var(--text-dim);
+    font-size:13px;
+    font-weight:600;
+    white-space:nowrap;
+    display:flex; align-items:center; gap:6px;
+  }
+  .chip .dot{width:8px; height:8px; border-radius:50%; display:inline-block;}
+  .chip.active{
+    background:var(--card-hi);
+    color:var(--text);
+    border-color:var(--gold-dim);
+  }
+
+  .region-row{
+    padding:8px 20px 4px;
+  }
+  select#regionSelect{
+    width:100%;
+    background:var(--bg-elev);
+    border:1px solid var(--line);
+    color:var(--text-dim);
+    border-radius:10px;
+    padding:9px 12px;
+    font-size:13px;
+    font-family:'Inter',sans-serif;
+    font-weight:500;
+    -webkit-appearance:none; appearance:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a8938a' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;
+    background-position:right 10px center;
+    background-size:16px;
+  }
+
+  .count{
+    padding:14px 20px 6px;
+    color:var(--text-dim);
+    font-size:12px;
+    letter-spacing:0.3px;
+  }
+
+  main{padding:0 20px 40px;}
+
+  .wine-card{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    background:var(--card);
+    border-radius:var(--radius);
+    padding:14px 14px;
+    margin-bottom:10px;
+    border-left:3px solid var(--line);
+    cursor:pointer;
+  }
+  .wine-card:active{background:var(--card-hi);}
+  .wine-card .info{flex:1; min-width:0;}
+  .wine-card .nome{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:16.5px;
+    line-height:1.25;
+    margin-bottom:3px;
+  }
+  .wine-card .cantina{
+    color:var(--text-dim);
+    font-size:13px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .wine-card .meta{
+    text-align:right;
+    flex:none;
+  }
+  .wine-card .prezzo{
+    font-weight:700;
+    font-size:14px;
+    color:var(--gold);
+    white-space:nowrap;
+  }
+  .wine-card .regione-tag{
+    display:block;
+    color:var(--text-dim);
+    font-size:10.5px;
+    margin-top:4px;
+    max-width:110px;
+    text-align:right;
+    line-height:1.2;
+  }
+
+  .empty{
+    text-align:center;
+    padding:60px 20px;
+    color:var(--text-dim);
+  }
+  .empty .glass{font-size:34px; margin-bottom:10px; display:block;}
+
+  /* Detail overlay */
+  .overlay{
+    position:fixed; inset:0;
+    background:rgba(8,4,5,0.6);
+    backdrop-filter:blur(2px);
+    z-index:50;
+    opacity:0; pointer-events:none;
+    transition:opacity .22s ease;
+  }
+  .overlay.show{opacity:1; pointer-events:auto;}
+  .sheet{
+    position:absolute; left:0; right:0; bottom:0;
+    max-height:88vh;
+    background:var(--bg-elev);
+    border-radius:22px 22px 0 0;
+    padding:14px 22px calc(28px + env(safe-area-inset-bottom,0px));
+    transform:translateY(100%);
+    transition:transform .28s cubic-bezier(.32,.72,0,1);
+    overflow-y:auto;
+    border-top:1px solid var(--line);
+  }
+  .overlay.show .sheet{transform:translateY(0);}
+  .sheet .grabber{
+    width:36px; height:4px; border-radius:2px;
+    background:var(--line); margin:2px auto 16px;
+  }
+  .sheet .badge{
+    display:inline-flex; align-items:center; gap:6px;
+    padding:5px 12px; border-radius:100px;
+    background:var(--card); font-size:12px; font-weight:700;
+    margin-bottom:14px;
+  }
+  .sheet .badge .dot{width:8px; height:8px; border-radius:50%;}
+  .sheet h2{
+    font-family:'Fraunces',serif;
+    font-size:26px;
+    font-weight:700;
+    margin:0 0 4px;
+    line-height:1.15;
+  }
+  .sheet .cantina-full{
+    color:var(--gold);
+    font-size:15px;
+    font-weight:600;
+    margin-bottom:2px;
+  }
+  .sheet .regione-full{
+    color:var(--text-dim);
+    font-size:13px;
+    margin-bottom:18px;
+  }
+  .sheet .prezzo-box{
+    display:flex; align-items:baseline; gap:6px;
+    background:var(--card);
+    border-radius:12px;
+    padding:12px 16px;
+    margin-bottom:18px;
+  }
+  .sheet .prezzo-box .label{color:var(--text-dim); font-size:12px;}
+  .sheet .prezzo-box .val{font-size:19px; font-weight:700; color:var(--gold); margin-left:auto;}
+  .sheet .desc-label{
+    font-size:11px; text-transform:uppercase; letter-spacing:0.8px;
+    color:var(--text-dim); margin-bottom:8px; font-weight:600;
+  }
+  .sheet p.desc{
+    font-size:15.5px; line-height:1.55; color:var(--text);
+    margin:0;
+  }
+  .sheet .close-btn{
+    position:absolute; top:14px; right:18px;
+    width:30px; height:30px; border-radius:50%;
+    background:var(--card); border:none; color:var(--text-dim);
+    font-size:16px; display:flex; align-items:center; justify-content:center;
+  }
+</style>
+</head>
+<body>
+
+<header class="app">
+  <h1>L'Arsenale</h1>
+  <div class="sub" id="subCount">101 vini pronti al colpo sicuro</div>
+  <div class="search-wrap">
+    <span class="icon">&#128269;</span>
+    <input id="searchInput" type="text" placeholder="Cerca per nome o cantina..." autocomplete="off">
+  </div>
+</header>
+
+<div class="filters" id="tipoFilters"></div>
+<div class="region-row">
+  <select id="regionSelect"></select>
+</div>
+<div class="count" id="resultCount"></div>
+
+<main id="list"></main>
+
+<div class="overlay" id="overlay">
+  <div class="sheet" id="sheet">
+    <button class="close-btn" id="closeBtn">&#10005;</button>
+    <div class="grabber"></div>
+    <div class="badge" id="detailBadge"></div>
+    <h2 id="detailNome"></h2>
+    <div class="cantina-full" id="detailCantina"></div>
+    <div class="regione-full" id="detailRegione"></div>
+    <div class="prezzo-box">
+      <span class="label">Prezzo indicativo</span>
+      <span class="val" id="detailPrezzo"></span>
+    </div>
+    <div class="desc-label">Perché sceglierlo</div>
+    <p class="desc" id="detailDesc"></p>
+  </div>
+</div>
+
+<script>
+const TIPO_INFO = {
+  bianco:    { label:"Bianco",     color:"var(--bianco)" },
+  rosato:    { label:"Rosato",     color:"var(--rosato)" },
+  rosso:     { label:"Rosso",      color:"var(--rosso)" },
+  bollicina: { label:"Bollicina",  color:"var(--bollicina)" },
+  dolce:     { label:"Dolce",      color:"var(--dolce)" }
+};
+
+const WINES = [
+{nome:"Chardonnay",cantina:"Mezzacorona",tipo:"bianco",regione:"Trentino Alto Adige",prezzo:"5€ - 6€",desc:"Il \"base\" per eccellenza. Pulito, semplice, onesto. Perfetto per un aperitivo senza pretese o per cucinare."},
+{nome:"Müller Thurgau",cantina:"Kettmeir",tipo:"bianco",regione:"Trentino Alto Adige",prezzo:"8€ - 10€",desc:"Bottiglia renana (alta) che fa scena. Profumo esplosivo di fiori. Piace a tutti, anche a chi non beve vino."},
+{nome:"Gewürztraminer",cantina:"Cantina Toblino",tipo:"bianco",regione:"Trentino Alto Adige",prezzo:"9€ - 11€",desc:"Biologico spesso reperibile in GDO. Aromatico, speziato, perfetto con cibo piccante o formaggi."},
+{nome:"Pinot Bianco",cantina:"Colterenzio (Schreckbichl)",tipo:"bianco",regione:"Trentino Alto Adige",prezzo:"10€ - 12€",desc:"Il bianco \"da tutti i giorni\" di lusso. Fresco, mela verde, super versatile."},
+{nome:"Sauvignon (Linea Classica)",cantina:"St. Michael Eppan",tipo:"bianco",regione:"Trentino Alto Adige",prezzo:"11€ - 13€",desc:"San Michele Appiano è una garanzia assoluta. Questo Sauvignon ha quel profumo di sambuco e foglia di pomodoro tipico. Top class."},
+{nome:"Gewürztraminer",cantina:"Tramin",tipo:"bianco",regione:"Trentino Alto Adige",prezzo:"13€ - 15€",desc:"Saliamo di livello. Tramin è la cantina regina del Gewürztraminer. Bottiglia importante, gusto intenso. Regalo perfetto."},
+{nome:"Ribolla Gialla",cantina:"Tenuta Ca' Bolani",tipo:"bianco",regione:"Friuli Venezia Giulia",prezzo:"7€ - 9€",desc:"La Ribolla va di moda. Questa è fresca, agrumata e si trova ovunque (spesso in offerta)."},
+{nome:"Friulano (ex Tocai)",cantina:"Cormòns",tipo:"bianco",regione:"Friuli Venezia Giulia",prezzo:"8€ - 10€",desc:"Il vino della tradizione friulana. Mandorlato, secco. Da bere con il prosciutto crudo (obbligatorio)."},
+{nome:"Pinot Grigio",cantina:"Santa Margherita",tipo:"bianco",regione:"Friuli Venezia Giulia",prezzo:"9€ - 11€",desc:"Un classico immortale. È il Pinot Grigio più famoso al mondo (gli americani impazziscono). Elegante e affidabile."},
+{nome:"Sauvignon",cantina:"Fantinel (Borgo Tesis)",tipo:"bianco",regione:"Friuli Venezia Giulia",prezzo:"9€ - 11€",desc:"Ottimo rapporto qualità/prezzo per un Sauvignon friulano molto tipico e vegetale."},
+{nome:"Bianco di Custoza",cantina:"Zenato",tipo:"bianco",regione:"Veneto",prezzo:"6€ - 8€",desc:"Sottovalutato. Zenato lavora benissimo. Fresco, leggero, da bere a secchiate d'estate."},
+{nome:"Soave Classico",cantina:"Bolla",tipo:"bianco",regione:"Veneto",prezzo:"7€ - 9€",desc:"Cantina storica. Il Soave è tornato di moda. Minerale, sapido, ottimo col pesce di lago o sushi."},
+{nome:"Lugana",cantina:"Ca' Maiol",tipo:"bianco",regione:"Lombardia",prezzo:"11€ - 13€",desc:"Il Lugana più famoso. Bottiglia inconfondibile (un po' schiacciata). Morbido, piacevole, fa sempre un figurone."},
+{nome:"Gavi di Gavi",cantina:"La Scolca (Etichetta Bianca)",tipo:"bianco",regione:"Piemonte",prezzo:"12€ - 15€",desc:"Il Gavi è il bianco nobile del Piemonte. La Scolca è la cantina che l'ha reso celebre. Secco, deciso, elegante."},
+{nome:"Roero Arneis",cantina:"Blangé (Ceretto)",tipo:"bianco",regione:"Piemonte",prezzo:"18€ - 22€",desc:"È il \"vino dei VIP\". Costoso per un bianco da GDO, ma è uno status symbol. Leggermente frizzantino, etichetta iconica. Da portare se vuoi fare colpo sicuro."},
+{nome:"Verdicchio dei Castelli di Jesi",cantina:"Fazi Battaglia (Titulus)",tipo:"bianco",regione:"Marche",prezzo:"5€ - 7€",desc:"L'anfora verde è iconica. È la storia d'Italia. Secchissimo, mandorlato, perfetto col pesce fritto. Costa niente, vale tanto."},
+{nome:"Verdicchio Classico",cantina:"Umani Ronchi (Villa Bianchi)",tipo:"bianco",regione:"Marche",prezzo:"6€ - 8€",desc:"Se non ti piace la bottiglia ad anfora, prendi questo. Umani Ronchi è una garanzia di pulizia e qualità nelle Marche."},
+{nome:"Orvieto Classico",cantina:"Santa Cristina (Antinori)",tipo:"bianco",regione:"Umbria",prezzo:"6€ - 8€",desc:"Dietro c'è la mano di Antinori. È un vino \"facile\", leggero, che bevi come l'acqua. Per pranzi veloci è il top."},
+{nome:"Frascati Superiore",cantina:"Fontana Candida",tipo:"bianco",regione:"Lazio",prezzo:"5€ - 7€",desc:"Il vino di Roma. Secco, sapido. Non è più il vinello da osteria di una volta, ora è fatto bene. Con la carbonara (o gricia) spacca."},
+{nome:"Pecorino",cantina:"Cantina Tollo",tipo:"bianco",regione:"Abruzzo",prezzo:"6€ - 8€",desc:"Il Pecorino va di moda perché ha struttura. Questo costa poco ed è bello \"ciccio\" in bocca."},
+{nome:"Passerina",cantina:"Velenosi",tipo:"bianco",regione:"Marche",prezzo:"8€ - 10€",desc:"Un vino floreale, gentile. Piace molto a chi non ama l'acidità troppo spinta. Velenosi lavora benissimo (etichetta molto curata)."},
+{nome:"Trebbiano d'Abruzzo",cantina:"Masciarelli (Linea Classica)",tipo:"bianco",regione:"Abruzzo",prezzo:"6€ - 8€",desc:"Gianni Masciarelli ha rivoluzionato l'Abruzzo. Questo è il suo vino base ma ha una complessità incredibile per il prezzo. Best Buy assoluto."},
+{nome:"Falanghina del Sannio",cantina:"Mastroberardino",tipo:"bianco",regione:"Campania",prezzo:"9€ - 11€",desc:"Mastroberardino è il \"Papà\" dei vini campani. Una Falanghina da manuale: fresca, agrumata, perfetta con mozzarella e pesce."},
+{nome:"Fiano di Avellino",cantina:"Feudi di San Gregorio",tipo:"bianco",regione:"Campania",prezzo:"12€ - 14€",desc:"Bottiglia di design inconfondibile (alta, nera, etichetta minimal). Vino strutturato, sa di nocciola e fiori. Regalo perfetto."},
+{nome:"Greco di Tufo",cantina:"La Guardiense (Janare)",tipo:"bianco",regione:"Campania",prezzo:"7€ - 9€",desc:"Rapporto qualità/prezzo imbattibile per un Greco. Minerale, quasi salato."},
+{nome:"Chardonnay",cantina:"Tormaresca",tipo:"bianco",regione:"Puglia",prezzo:"8€ - 10€",desc:"Vuoi uno Chardonnay ma fatto al caldo del Sud? Questo è morbido, tropicale (ananas, banana). Piace facilissimo."},
+{nome:"Sauvignon (Linea Classica)",cantina:"St. Michael Eppan",tipo:"bianco",regione:"Trentino Alto Adige",prezzo:"11€ - 13€",desc:"San Michele Appiano è una garanzia assoluta. Questo Sauvignon ha quel profumo di sambuco e foglia di pomodoro tipico. Top class."},
+{nome:"Vermentino di Sardegna",cantina:"Sella & Mosca (La Cala)",tipo:"bianco",regione:"Sardegna",prezzo:"5€ - 7€",desc:"È IL Vermentino da battaglia. Costa poco, sa di mare e maestrale. Con gli spaghetti alle vongole è la morte sua."},
+{nome:"Vermentino di Sardegna",cantina:"Argiolas (Costamolino)",tipo:"bianco",regione:"Sardegna",prezzo:"9€ - 11€",desc:"Un gradino sopra. Più profumato, più intenso. Argiolas è il re della Sardegna. Se vuoi spendere quei 2 euro in più, li vale tutti."},
+{nome:"Grillo",cantina:"Tasca d'Almerita (Regaleali Bianco)",tipo:"bianco",regione:"Sicilia",prezzo:"8€ - 10€",desc:"Un classico siciliano. Bottiglia renana, etichetta storica. Fresco ma con quel tocco siciliano inconfondibile."},
+{nome:"Anthilia",cantina:"Donnafugata",tipo:"bianco",regione:"Sicilia",prezzo:"10€ - 12€",desc:"Il vino bianco siciliano più famoso. L'etichetta con la donna e i capelli al vento è un'opera d'arte. Portalo a cena e hai vinto."},
+
+{nome:"Bardolino Chiaretto",cantina:"Zenato",tipo:"rosato",regione:"Veneto",prezzo:"7€ - 9€",desc:"Zenato non sbaglia un colpo. Colore rosa pallido, gusto leggerissimo. Perfetto per l'aperitivo estivo."},
+{nome:"Bardolino Chiaretto",cantina:"Bolla",tipo:"rosato",regione:"Veneto",prezzo:"5€ - 7€",desc:"Si trova in ogni supermercato. Prezzo ridicolo per un vino onesto, pulito, da bere ghiacciato senza pensieri."},
+{nome:"Lagrein Rosato (Kretzer)",cantina:"Mezzacorona (o Castel Firmian)",tipo:"rosato",regione:"Trentino Alto Adige",prezzo:"6€ - 8€",desc:"Il Lagrein è un'uva potente, ma vinificato in rosa diventa una spremuta di frutti di bosco freschi. Ottimo coi salumi."},
+{nome:"Valtenesi Chiaretto (Roseri)",cantina:"Ca' Maiol",tipo:"rosato",regione:"Lombardia",prezzo:"10€ - 12€",desc:"La bottiglia \"schiacciata\" tipica di Ca' Maiol fa molta scena. È un rosato di lago, sapido, elegante. Regalo perfetto."},
+{nome:"RosaMara",cantina:"Costaripa (Mattia Vezzola)",tipo:"rosato",regione:"Lombardia",prezzo:"12€ - 15€",desc:"Qui siamo nell'Olimpo. Mattia Vezzola è il re dei rosati del Garda. Colore perla, gusto da ristorante stellato. Se vuoi fare l'esperto vero, porta questo."},
+{nome:"Santa Cristina Rosato",cantina:"Antinori",tipo:"rosato",regione:"Toscana",prezzo:"6€ - 8€",desc:"Il jolly. Bottiglia classica, marchio Antinori che rassicura tutti. Fruttato, semplice, non tradisce mai."},
+{nome:"Cipresseto",cantina:"Antinori (Santa Cristina)",tipo:"rosato",regione:"Toscana",prezzo:"9€ - 11€",desc:"Il fratellino più elegante. Bottiglia satinata/opaca molto bella al tatto. Molto \"femminile\" e delicato."},
+{nome:"Bolgheri Rosato (Scalabrone)",cantina:"Guado al Tasso",tipo:"rosato",regione:"Toscana",prezzo:"14€ - 17€",desc:"Vuoi bere Bolgheri (zona di vini da 200€) spendendo poco? Ecco la soluzione. Strutturato, potente. Ci mangi anche la carne bianca."},
+{nome:"Cerasuolo d'Abruzzo (Tralcetto)",cantina:"Zaccagnini",tipo:"rosato",regione:"Abruzzo",prezzo:"8€ - 10€",desc:"IL MITO. Quello col pezzetto di legno (tralcio) legato al collo. Lo riconoscono tutti. Colore \"Cerasuolo\" (ciliegia) intenso. È quasi un rosso. Spacca con la pizza."},
+{nome:"Cerasuolo d'Abruzzo",cantina:"Masciarelli",tipo:"rosato",regione:"Abruzzo",prezzo:"7€ - 9€",desc:"Se Zaccagnini è il lato \"pop\", Masciarelli è il lato \"serio\". Vino gastronomico, pulito, perfetto."},
+{nome:"Cerasuolo d'Abruzzo (Fantini)",cantina:"Farnese",tipo:"rosato",regione:"Abruzzo",prezzo:"5€ - 7€",desc:"Costa pochissimo e ha vinto premi su premi per il rapporto qualità/prezzo. Frutta esplosiva (fragola, lampone)."},
+{nome:"Calafuria",cantina:"Tormaresca",tipo:"rosato",regione:"Puglia",prezzo:"11€ - 13€",desc:"È la STAR dei rosati italiani. Bottiglia in vetro lavorato bellissima, tappo in vetro (spesso). Portarlo a cena è status symbol. Negroamaro in purezza."},
+{nome:"Five Roses (Base)",cantina:"Leone de Castris",tipo:"rosato",regione:"Puglia",prezzo:"9€ - 11€",desc:"Il primo rosato imbottigliato in Italia (1943). Bere questo è bere la storia. Sapido, serio."},
+{nome:"Tramari",cantina:"San Marzano",tipo:"rosato",regione:"Puglia",prezzo:"8€ - 10€",desc:"Rosato di Primitivo. Morbido, piacione, etichetta \"minimal chic\". Va a ruba perché piace a chi odia l'acidità."},
+{nome:"Rosato del Salento",cantina:"Notte Rossa",tipo:"rosato",regione:"Puglia",prezzo:"6€ - 8€",desc:"Vale il doppio di quello che costa. Fresco ma con corpo. La scelta \"budget\" migliore del Sud."},
+{nome:"Rosa del Golfo",cantina:"Rosa del Golfo",tipo:"rosato",regione:"Puglia",prezzo:"9€ - 11€",desc:"Un classico salentino meno \"commerciale\" di Calafuria ma di grandissima qualità. Per chi vuole distinguersi dalla massa."},
+{nome:"Cirò Rosato",cantina:"Librandi",tipo:"rosato",regione:"Calabria",prezzo:"5€ - 7€",desc:"La Calabria che vince. Librandi è una garanzia. Vino fresco, sapido, ideale col piccante o con le fritture."},
+{nome:"Etna Rosato",cantina:"Tornatore (o Planeta)",tipo:"rosato",regione:"Sicilia",prezzo:"14€ - 16€",desc:"L'Etna è il trend del momento. Minerale, vulcanico, elegante. Costa un po' di più ma è classe pura."},
+{nome:"Regaleali Rosato",cantina:"Tasca d'Almerita",tipo:"rosato",regione:"Sicilia",prezzo:"7€ - 9€",desc:"Il rosato siciliano da manuale. Nerello Mascalese. Bottiglia renana. Semplice e perfetto."},
+{nome:"Corvo Rosa",cantina:"Duca di Salaparuta",tipo:"rosato",regione:"Sicilia",prezzo:"4€ - 6€",desc:"Il \"Mercenario\" della Sicilia. Costa niente, lo trovi ovunque, è onesto e fruttato. Per la grigliata numerosa è la salvezza."},
+
+{nome:"Barbera d'Asti \"Le Orme\"",cantina:"Michele Chiarlo",tipo:"rosso",regione:"Piemonte",prezzo:"9€ - 11€",desc:"Etichetta storica (quella con le figure stilizzate). Barbera succosa, acidità perfetta per pulire la bocca dopo salumi o pasta al ragù. È una garanzia."},
+{nome:"Dolcetto d'Alba",cantina:"Prunotto (Antinori)",tipo:"rosso",regione:"Piemonte",prezzo:"8€ - 10€",desc:"Prunotto è la cantina piemontese di Antinori. Vino vinoso, semplice, sincero. Il classico rosso da mettere in tavola tutti i giorni senza vergogna."},
+{nome:"Nebbiolo Langhe",cantina:"Produttori del Barbaresco",tipo:"rosso",regione:"Piemonte",prezzo:"15€ - 18€",desc:"IL TRUCCO SUPREMO. Questo è praticamente un Barbaresco declassato. Stessa uva, stessa mano, costa un terzo. Chi lo conosce ti stima all'istante."},
+{nome:"Barolo",cantina:"Beni di Batasiolo",tipo:"rosso",regione:"Piemonte",prezzo:"18€ - 22€",desc:"Trovare un Barolo \"vero\" sotto i 20€ è dura. Questo si trova spesso in GDO (Esselunga/Coop). Non è il Barolo della vita, ma è corretto, tipico e ha scritto \"BAROLO\" in etichetta. Per fare scena a basso costo funziona."},
+{nome:"Valtellina Superiore (Inferno/Sassella)",cantina:"Nino Negri",tipo:"rosso",regione:"Lombardia",prezzo:"12€ - 15€",desc:"Nebbiolo di montagna. Elegante, fine, meno potente del Barolo ma classe da vendere. Nino Negri è il re della Valtellina."},
+{nome:"Bonarda \"C'era una volta\"",cantina:"Giorgi",tipo:"rosso",regione:"Lombardia",prezzo:"6€ - 8€",desc:"Rosso frizzante e amabile. È il \"guilty pleasure\" (piacere colpevole). Con i salumi o la cotoletta è imbattibile. Bottiglia \"cicciotta\" e ruvida molto bella."},
+{nome:"Lambrusco Grasparossa",cantina:"Cleto Chiarli (Vigneto Cialdini)",tipo:"rosso",regione:"Emilia-Romagna",prezzo:"6€ - 8€",desc:"Dimentica la soda dolce da 2 euro. Questo è Lambrusco VERO. Scuro, schiuma viola, secco e fruttato. Pulisce la bocca dal grasso come nient'altro."},
+{nome:"Gutturnio Superiore",cantina:"Cantina Valtidone",tipo:"rosso",regione:"Emilia-Romagna",prezzo:"4€ - 6€",desc:"Barbera + Bonarda. Il vino da battaglia emiliano. Fermo, strutturato, costa niente e vale tanto."},
+{nome:"Valpolicella Ripasso",cantina:"Sartori (Bottiglia con stemma)",tipo:"rosso",regione:"Veneto",prezzo:"10€ - 12€",desc:"IL BABY AMARONE. Fatto ripassando il vino sulle bucce dell'Amarone. Prende potenza e gusto dolce/amaro, ma costa un quarto. Sartori ha una bottiglia pesante con stemma in vetro che fa figura imperiale."},
+{nome:"Campofiorin",cantina:"Masi",tipo:"rosso",regione:"Veneto",prezzo:"11€ - 14€",desc:"Un'istituzione. Masi ha inventato questo stile. Etichetta riconoscibile in tutto il mondo. Morbido, vellutato, speziato. Regalo \"paracadute\" (non sbagli mai)."},
+{nome:"Bardolino Classico",cantina:"Bolla",tipo:"rosso",regione:"Veneto",prezzo:"5€ - 7€",desc:"Il rosso \"estivo\". Leggero, scarico, si può bere anche leggermente fresco. Se non vuoi il solito rosso pesante da 14 gradi."},
+{nome:"Cabernet Sauvignon",cantina:"Santa Margherita",tipo:"rosso",regione:"Veneto",prezzo:"7€ - 9€",desc:"Il Cabernet è internazionale, piace perché è erbaceo e deciso. Santa Margherita è garanzia di pulizia tecnica."},
+{nome:"Refosco dal Peduncolo Rosso",cantina:"Fantinel",tipo:"rosso",regione:"Friuli Venezia Giulia",prezzo:"8€ - 10€",desc:"Il rosso autoctono del Friuli. Rustico, tannico, sgarbato il giusto. Perfetto per carni alla griglia unte."},
+{nome:"Teroldego Rotaliano Riserva",cantina:"Mezzacorona",tipo:"rosso",regione:"Trentino Alto Adige",prezzo:"8€ - 10€",desc:"Etichetta nera e oro \"Riserva\". Sembra costare 25€. Il Teroldego è il \"Principe del Trentino\": frutti scuri, cioccolato, morbido. Best Buy assoluto."},
+{nome:"Lagrein",cantina:"St. Michael Eppan (o Kettmeir)",tipo:"rosso",regione:"Trentino Alto Adige",prezzo:"10€ - 13€",desc:"Rosso scuro, impenetrabile, profuma di viola e more. Strutturato ma vellutato. Se vuoi uscire dai soliti nomi e fare l'intenditore."},
+{nome:"Chianti Rufina Riserva \"Nipozzano\"",cantina:"Frescobaldi",tipo:"rosso",regione:"Toscana",prezzo:"13€ - 16€",desc:"È un'istituzione. C'è scritto \"RISERVA\", c'è lo stemma nobiliare Frescobaldi. Portarlo a cena significa dire \"Non ho badato a spese\" (anche se costa il giusto). Elegante, speziato."},
+{nome:"Santa Cristina Rosso",cantina:"Antinori",tipo:"rosso",regione:"Toscana",prezzo:"7€ - 9€",desc:"Il vino rosso più bevuto d'Italia. Sangiovese morbido (c'è un po' di Merlot). Non sbagli mai. Se sei indeciso, prendi lui."},
+{nome:"Morellino di Scansano",cantina:"Fattoria dei Barbi",tipo:"rosso",regione:"Toscana",prezzo:"9€ - 11€",desc:"L'alternativa \"wild\" al Chianti. Più caldo, più fruttato. La Maremma nel bicchiere. Perfetto con la carne alla griglia."},
+{nome:"Montepulciano d'Abruzzo \"Tralcetto\"",cantina:"Zaccagnini",tipo:"rosso",regione:"Abruzzo",prezzo:"9€ - 11€",desc:"Quello con il pezzo di legno vero (tralcio) legato al collo. Iconico. Rustico ma non troppo. Si porta a cena anche solo per l'estetica della bottiglia."},
+{nome:"Montepulciano d'Abruzzo",cantina:"Masciarelli (Classico)",tipo:"rosso",regione:"Abruzzo",prezzo:"6€ - 8€",desc:"Il Re dell'Abruzzo. Probabilmente il miglior rapporto qualità/prezzo d'Italia sui rossi. Intenso, pulito, sa di amarena."},
+{nome:"Rosso Piceno (Brecciarolo)",cantina:"Velenosi",tipo:"rosso",regione:"Marche",prezzo:"8€ - 10€",desc:"Marche. Montepulciano + Sangiovese. Etichetta molto curata. Vino \"ciccio\", morbido, che riempie la bocca."},
+{nome:"Syrah \"Tellus\"",cantina:"Falesco (Famiglia Cotarella)",tipo:"rosso",regione:"Lazio",prezzo:"10€ - 12€",desc:"Lazio. L'etichetta è famosa (spesso artistica). Il Syrah qui è speziato (pepe nero) e internazionale. Molto \"cool\"."},
+{nome:"Primitivo di Manduria",cantina:"Notte Rossa",tipo:"rosso",regione:"Puglia",prezzo:"7€ - 9€ (spesso in offerta)",desc:"Ormai un classico del nostro canale. Etichetta nera/oro pesante. Gusto di prugna e marmellata. Piace al 99% delle persone perché è morbido e caldo."},
+{nome:"Primitivo di Manduria \"Talò\"",cantina:"San Marzano",tipo:"rosso",regione:"Puglia",prezzo:"10€ - 12€",desc:"Se vuoi salire di livello rispetto al Notte Rossa. Bottiglia ancora più bella, gusto vanigliato. Sembra un vino da 30€."},
+{nome:"Salice Salentino Riserva",cantina:"Leone de Castris",tipo:"rosso",regione:"Puglia",prezzo:"8€ - 10€",desc:"La storia della Puglia. Negroamaro. Più serio del Primitivo, meno dolce, più speziato. Etichetta vintage bellissima."},
+{nome:"Aglianico (Re di More)",cantina:"Mastroberardino",tipo:"rosso",regione:"Campania",prezzo:"10€ - 12€",desc:"L'Aglianico è il \"Barolo del Sud\". Tannico, potente, longevo. Mastroberardino è garanzia. Da bere con arrosti pesanti."},
+{nome:"Aglianico del Vulture \"Pipoli\"",cantina:"Vigneti del Vulture",tipo:"rosso",regione:"Basilicata",prezzo:"7€ - 9€",desc:"Basilicata. Un Aglianico moderno, \"domato\", morbido e vanigliato. Piace facilissimo. Etichetta bianca pulita ed elegante."},
+{nome:"Nero d'Avola \"Sedàra\"",cantina:"Donnafugata",tipo:"rosso",regione:"Sicilia",prezzo:"9€ - 11€",desc:"Sicilia. Etichetta artistica meravigliosa (Donnafugata è imbattibile sul marketing). Il vino è un Nero d'Avola moderno: frutta rossa, spezie, niente puzza di stalla."},
+{nome:"Cannonau di Sardegna Riserva",cantina:"Sella & Mosca",tipo:"rosso",regione:"Sardegna",prezzo:"8€ - 10€",desc:"Sardegna. Rosso mattone, profuma di mirto e macchia mediterranea. Invecchiato in botte grande. Fa molto \"vecchio stile\" ma è buonissimo."},
+{nome:"Carignano del Sulcis \"Grotta Rossa\"",cantina:"Cantina Santadi",tipo:"rosso",regione:"Sardegna",prezzo:"9€ - 11€",desc:"Una chicca sarda che pochi conoscono. Caldo, sapido, sa di mare e liquirizia. Se lo porti, sembri un esperto che conosce le zone di nicchia."},
+
+{nome:"Trento DOC Brut",cantina:"Rotari",tipo:"bollicina",regione:"Trentino Alto Adige",prezzo:"10€ - 12€",desc:"Il Re del rapporto qualità/prezzo. Spesso in offerta. Fa 24 mesi sui lieviti come uno Champagne base. Elegante, cremoso. Best Buy assoluto."},
+{nome:"Trento DOC Millesimato",cantina:"Altemasi",tipo:"bollicina",regione:"Trentino Alto Adige",prezzo:"12€ - 15€",desc:"Bottiglia elegante con etichetta argentata. Secco, tagliente, pulitissimo. Per una cena di pesce è perfetto."},
+{nome:"Trento DOC Brut (Maximum o Base)",cantina:"Ferrari",tipo:"bollicina",regione:"Trentino Alto Adige",prezzo:"16€ - 20€",desc:"Il brand italiano più famoso nel mondo. Portare un Ferrari fa sempre fare bella figura (\"Ah, hai preso il Ferrari!\"). Garanzia di qualità standardizzata ma alta."},
+{nome:"Trento DOC Brut",cantina:"Cesarini Sforza",tipo:"bollicina",regione:"Trentino Alto Adige",prezzo:"11€ - 13€",desc:"L'alternativa \"aquila blu\". Ottimo Trento DOC, molto morbido e floreale. Spesso si trova a prezzi ottimi."},
+{nome:"Franciacorta '61 Brut",cantina:"Berlucchi",tipo:"bollicina",regione:"Lombardia",prezzo:"16€ - 19€",desc:"Iconico. L'etichetta col \"61\" gigante fa scena e vintage. È morbido, piacevole, non troppo acido. Piace a tutti."},
+{nome:"Franciacorta Cuvée Royale",cantina:"Marchese Antinori (Tenuta Montenisa)",tipo:"bollicina",regione:"Lombardia",prezzo:"19€ - 23€",desc:"Vuoi un Franciacorta \"nobile\"? Qui c'è lo stemma Antinori. Gusto raffinato, note di pesca bianca. Regalo importante."},
+{nome:"Franciacorta Brut",cantina:"Contadi Castaldi",tipo:"bollicina",regione:"Lombardia",prezzo:"15€ - 18€",desc:"Bottiglia molto particolare (collo corto e largo). Brand giovanile, vino fresco e dinamico. Molto \"cool\" per l'aperitivo."},
+{nome:"Oltrepò Pavese Metodo Classico (Pinot Nero)",cantina:"Giorgi 1870",tipo:"bollicina",regione:"Lombardia",prezzo:"12€ - 15€",desc:"L'Oltrepò è la terza zona spumantistica d'Italia (sottovalutata). Pinot Nero in purezza. Struttura potente, quasi da tutto pasto."},
+{nome:"Alta Langa (Cuvée)",cantina:"Cinzano",tipo:"bollicina",regione:"Piemonte",prezzo:"18€ - 22€",desc:"Sì, Cinzano fa anche cose serie. La loro Alta Langa è sorprendente. Vintage, complessa. Per stupire lo snob che rideva del marchio."},
+{nome:"Valdobbiadene Prosecco Superiore (Etichetta Nera)",cantina:"Villa Sandi",tipo:"bollicina",regione:"Veneto",prezzo:"9€ - 11€",desc:"Villa Sandi lavora benissimo. Questa linea è elegante, nera, non sembra il solito Prosecco da discount."},
+{nome:"Valdobbiadene Prosecco Superiore",cantina:"Carpenè Malvolti",tipo:"bollicina",regione:"Veneto",prezzo:"8€ - 10€",desc:"Hanno inventato loro il Prosecco nell'800. Bere Carpenè vuol dire bere la storia e la tradizione. Secco il giusto."},
+{nome:"Valdobbiadene Prosecco Superiore (Cuvée di Boj)",cantina:"Valdo",tipo:"bollicina",regione:"Veneto",prezzo:"9€ - 11€",desc:"Una selezione speciale di Valdo. Bottiglia tozza e pesante. Molto più buono del Valdo base. Ottimo floreale."},
+{nome:"Prosecco DOC (Mo Collection)",cantina:"Mionetto",tipo:"bollicina",regione:"Veneto",prezzo:"7€ - 9€",desc:"Design moderno, etichetta gialla/arancio obliqua. Molto pop. Vino semplice ma corretto e pulito."},
+{nome:"Valdobbiadene Rive di Colbertaldo",cantina:"Masottina",tipo:"bollicina",regione:"Veneto",prezzo:"11€ - 13€",desc:"\"Rive\" significa che le uve vengono da una singola zona scoscesa (Cru). È il Prosecco di alta qualità. Se devi portare Prosecco a cena, porta un Rive."},
+{nome:"Ribolla Gialla Spumante",cantina:"Fantinel",tipo:"bollicina",regione:"Friuli Venezia Giulia",prezzo:"8€ - 10€",desc:"Stanchi del Prosecco? La Ribolla spumantizzata è la risposta. Freschissima, agrumata, pulisce la bocca che è un piacere."},
+{nome:"Müller Thurgau Spumante",cantina:"Cavit",tipo:"bollicina",regione:"Trentino Alto Adige",prezzo:"5€ - 6€",desc:"Il re delle feste low cost. Aromatico, profumato, costa niente. Se devi fare sprone per 20 persone, prendi questo e non sbagli."},
+
+{nome:"Moscato d'Asti",cantina:"Vignaioli di Santo Stefano (Ceretto)",tipo:"dolce",regione:"Piemonte",prezzo:"12€ - 14€",desc:"Il miglior Moscato in GDO. Bottiglia iconica bassa e allungata. Dolce ma non stucchevole, sa di salvia e pesca. Capolavoro."},
+{nome:"Moscato d'Asti",cantina:"Prunotto",tipo:"dolce",regione:"Piemonte",prezzo:"10€ - 12€",desc:"Altra garanzia piemontese. Fine, delicato. Perfetto con la crostata di frutta."},
+{nome:"Brachetto d'Acqui (Rosa Regale)",cantina:"Banfi",tipo:"dolce",regione:"Piemonte",prezzo:"10€ - 12€",desc:"Spumante rosso dolce! Sa di fragola e rosa. Con il cioccolato o i frutti di bosco è l'abbinamento della vita. Molto romantico (bottiglia trasparente che fa vedere il rosso)."},
+{nome:"Asti Spumante (Vintage)",cantina:"Fontanafredda",tipo:"dolce",regione:"Piemonte",prezzo:"7€ - 9€",desc:"Dimentica l'Asti dozzinale. Fontanafredda fa una linea con etichetta a righe vintage bellissima. Dolce, classico, per la torta della nonna."}
+];
+
+// ---- setup ----
+const listEl = document.getElementById('list');
+const tipoFiltersEl = document.getElementById('tipoFilters');
+const regionSelect = document.getElementById('regionSelect');
+const resultCountEl = document.getElementById('resultCount');
+const searchInput = document.getElementById('searchInput');
+
+let activeTipo = 'tutti';
+let activeRegione = 'tutte';
+
+function buildFilters(){
+  const chipsHtml = ['<div class="chip active" data-tipo="tutti">Tutti</div>']
+    .concat(Object.keys(TIPO_INFO).map(t =>
+      `<div class="chip" data-tipo="${t}"><span class="dot" style="background:${TIPO_INFO[t].color}"></span>${TIPO_INFO[t].label}</div>`
+    )).join('');
+  tipoFiltersEl.innerHTML = chipsHtml;
+  tipoFiltersEl.querySelectorAll('.chip').forEach(chip=>{
+    chip.addEventListener('click', ()=>{
+      activeTipo = chip.dataset.tipo;
+      tipoFiltersEl.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+      chip.classList.add('active');
+      render();
+    });
+  });
+
+  const regioni = [...new Set(WINES.map(w=>w.regione))];
+  regionSelect.innerHTML = '<option value="tutte">Tutte le regioni</option>' +
+    regioni.map(r=>`<option value="${r}">${r}</option>`).join('');
+  regionSelect.addEventListener('change', ()=>{
+    activeRegione = regionSelect.value;
+    render();
+  });
+}
+
+function matchesFilters(w, q){
+  if(activeTipo !== 'tutti' && w.tipo !== activeTipo) return false;
+  if(activeRegione !== 'tutte' && w.regione !== activeRegione) return false;
+  if(q){
+    const hay = (w.nome + ' ' + w.cantina).toLowerCase();
+    if(!hay.includes(q)) return false;
+  }
+  return true;
+}
+
+function render(){
+  const q = searchInput.value.trim().toLowerCase();
+  const results = WINES.filter(w => matchesFilters(w, q));
+  resultCountEl.textContent = results.length + (results.length===1 ? ' vino trovato' : ' vini trovati');
+
+  if(results.length === 0){
+    listEl.innerHTML = `<div class="empty"><span class="glass">🍷</span>Nessun vino corrisponde ai filtri.<br>Prova ad allargare la ricerca.</div>`;
+    return;
+  }
+
+  listEl.innerHTML = results.map((w, idx) => {
+    const info = TIPO_INFO[w.tipo];
+    const realIdx = WINES.indexOf(w);
+    return `
+    <div class="wine-card" style="border-left-color:${info.color}" data-idx="${realIdx}">
+      <div class="info">
+        <div class="nome">${w.nome}</div>
+        <div class="cantina">${w.cantina}</div>
+      </div>
+      <div class="meta">
+        <div class="prezzo">${w.prezzo.split(' ')[0]}</div>
+        <span class="regione-tag">${w.regione}</span>
+      </div>
+    </div>`;
+  }).join('');
+
+  listEl.querySelectorAll('.wine-card').forEach(card=>{
+    card.addEventListener('click', ()=> openDetail(WINES[card.dataset.idx]));
+  });
+}
+
+// ---- detail sheet ----
+const overlay = document.getElementById('overlay');
+const closeBtn = document.getElementById('closeBtn');
+
+function openDetail(w){
+  const info = TIPO_INFO[w.tipo];
+  document.getElementById('detailBadge').innerHTML = `<span class="dot" style="background:${info.color}"></span>${info.label}`;
+  document.getElementById('detailNome').textContent = w.nome;
+  document.getElementById('detailCantina').textContent = w.cantina;
+  document.getElementById('detailRegione').textContent = w.regione;
+  document.getElementById('detailPrezzo').textContent = w.prezzo;
+  document.getElementById('detailDesc').textContent = w.desc;
+  overlay.classList.add('show');
+  document.getElementById('sheet').scrollTop = 0;
+}
+function closeDetail(){ overlay.classList.remove('show'); }
+overlay.addEventListener('click', e=>{ if(e.target === overlay) closeDetail(); });
+closeBtn.addEventListener('click', closeDetail);
+
+searchInput.addEventListener('input', render);
+
+document.getElementById('subCount').textContent = WINES.length + ' vini pronti al colpo sicuro';
+
+buildFilters();
+render();
+
+// ---- offline shell (PWA) ----
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('sw.js').catch(()=>{});
+}
+</script>
+</body>
+</html>
