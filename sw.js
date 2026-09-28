@@ -1,12 +1,12 @@
 // Arsenale Vini - Service Worker
 // Convenzione: bump della versione della cache ad ogni modifica di index.html
-const CACHE_NAME = 'arsenale-vini-v3';
+const CACHE_NAME = 'arsenale-vini-v4';
 
 const ASSETS = [
   './',
   './index.html',
   './manifest.json',
-  './vini-custom.txt',
+  './vini.txt',
   './apple-touch-icon.png',
   './icon-192.png',
   './icon-512.png',
