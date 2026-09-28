@@ -52,13 +52,6 @@
     padding-bottom:8px;
     z-index:10;
   }
-  .head-row{display:flex; align-items:center; justify-content:space-between; gap:12px;}
-  .add-btn{
-    flex:none; width:38px; height:38px; border-radius:50%;
-    border:1px solid var(--gold-dim); background:var(--card-hi);
-    color:var(--gold); font-size:24px; line-height:1; font-weight:500;
-    display:flex; align-items:center; justify-content:center; padding:0 0 2px;
-  }
   .serif{font-family:'Fraunces',serif;}
 
   header.app{
@@ -287,36 +280,14 @@
     background:var(--card-hi); color:var(--gold); font-family:'Inter',sans-serif;
     font-size:10px; font-weight:700; letter-spacing:.4px; vertical-align:middle;
   }
-  .form-field{margin-bottom:14px;}
-  .form-field label{display:block; font-size:11px; text-transform:uppercase; letter-spacing:.8px; color:var(--text-dim); font-weight:600; margin-bottom:6px;}
-  .form-field input,.form-field select,.form-field textarea{
-    width:100%; background:var(--card); border:1px solid var(--line); color:var(--text);
-    border-radius:10px; padding:11px 12px; font-size:16px; font-family:'Inter',sans-serif;
-  }
-  .form-field textarea{min-height:96px; resize:vertical;}
-  .form-field input:focus,.form-field select:focus,.form-field textarea:focus{outline:none; border-color:var(--gold-dim);}
-  .primary-btn{
-    width:100%; padding:14px; border:none; border-radius:12px;
-    background:var(--gold); color:#1a0f0f; font-size:16px; font-weight:700; font-family:'Inter',sans-serif;
-  }
-  .danger-btn{
-    width:100%; margin-top:22px; padding:12px; border-radius:12px;
-    background:transparent; border:1px solid var(--line); color:#d97a86;
-    font-size:14px; font-weight:600; font-family:'Inter',sans-serif;
-  }
 </style>
 </head>
 <body>
 
 <div class="top">
 <header class="app">
-  <div class="head-row">
-    <div>
-      <h1>L'Arsenale</h1>
-      <div class="sub" id="subCount"></div>
-    </div>
-    <button class="add-btn" id="addBtn" aria-label="Aggiungi vino">+</button>
-  </div>
+  <h1>L'Arsenale</h1>
+  <div class="sub" id="subCount"></div>
   <div class="search-wrap">
     <span class="icon">&#128269;</span>
     <input id="searchInput" type="text" placeholder="Cerca per nome o cantina..." autocomplete="off">
@@ -346,22 +317,6 @@
     </div>
     <div class="desc-label">Perché sceglierlo</div>
     <p class="desc" id="detailDesc"></p>
-    <button class="danger-btn" id="deleteBtn" style="display:none">Elimina questo vino</button>
-  </div>
-</div>
-
-<div class="overlay" id="formOverlay">
-  <div class="sheet" id="formSheet">
-    <button class="close-btn" id="formClose">&#10005;</button>
-    <div class="grabber"></div>
-    <h2 style="margin-bottom:18px">Aggiungi un vino</h2>
-    <div class="form-field"><label for="fNome">Nome</label><input id="fNome" type="text" autocomplete="off"></div>
-    <div class="form-field"><label for="fCantina">Cantina</label><input id="fCantina" type="text" autocomplete="off"></div>
-    <div class="form-field"><label for="fTipo">Tipologia</label><select id="fTipo"></select></div>
-    <div class="form-field"><label for="fRegione">Regione</label><select id="fRegione"></select></div>
-    <div class="form-field"><label for="fPrezzo">Prezzo</label><input id="fPrezzo" type="text" placeholder="es. 8€ - 10€" autocomplete="off"></div>
-    <div class="form-field"><label for="fDesc">Descrizione</label><textarea id="fDesc"></textarea></div>
-    <button class="primary-btn" id="saveWine">Salva vino</button>
   </div>
 </div>
 
@@ -489,19 +444,39 @@ const regionSelect = document.getElementById('regionSelect');
 const resultCountEl = document.getElementById('resultCount');
 const searchInput = document.getElementById('searchInput');
 
-const REGIONI = ["Abruzzo","Basilicata","Calabria","Campania","Emilia-Romagna","Friuli Venezia Giulia","Lazio","Liguria","Lombardia","Marche","Molise","Piemonte","Puglia","Sardegna","Sicilia","Toscana","Trentino Alto Adige","Umbria","Valle d'Aosta","Veneto"];
-
-// vini aggiunti dall'utente: salvati solo su questo dispositivo (localStorage)
-const STORE_KEY = 'arsenale_custom_v1';
-function loadCustom(){ try{ return JSON.parse(localStorage.getItem(STORE_KEY) || '[]'); }catch(e){ return []; } }
-function saveCustom(){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(custom)); }catch(e){} }
-let custom = loadCustom().map(w => Object.assign({}, w, {custom:true}));
-const allWines = () => WINES.concat(custom);
-
 const esc = t => String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 
 let activeTipo = 'tutti';
 let activeRegione = 'tutte';
+let custom = []; // vini letti da vini-custom.txt
+const allWines = () => WINES.concat(custom);
+
+// ---- lettura vini-custom.txt (editabile a mano su GitHub, nessun token richiesto) ----
+async function loadCustomWines(){
+  try{
+    const res = await fetch('vini-custom.txt', {cache:'no-store'});
+    if(!res.ok) return [];
+    const text = await res.text();
+    return text.split('\n')
+      .map(l => l.trim())
+      .filter(l => l && !l.startsWith('#'))
+      .map(line => {
+        const parts = line.split('|');
+        if(parts.length < 6) return null;
+        const nome = parts[0].trim();
+        const cantina = parts[1].trim();
+        const tipo = parts[2].trim().toLowerCase();
+        const regione = parts[3].trim();
+        const prezzo = parts[4].trim();
+        const desc = parts.slice(5).join('|').trim();
+        if(!nome || !TIPO_INFO[tipo] || !regione) return null;
+        return { nome, cantina, tipo, regione, prezzo, desc, custom:true };
+      })
+      .filter(Boolean);
+  }catch(e){
+    return [];
+  }
+}
 
 function refreshRegions(){
   const present = [...new Set(allWines().map(w => w.regione))].sort((a,b)=>a.localeCompare(b,'it'));
@@ -578,11 +553,8 @@ function render(){
 // ---- detail sheet ----
 const overlay = document.getElementById('overlay');
 const closeBtn = document.getElementById('closeBtn');
-const deleteBtn = document.getElementById('deleteBtn');
-let currentWine = null;
 
 function openDetail(w){
-  currentWine = w;
   const info = TIPO_INFO[w.tipo];
   document.getElementById('detailBadge').innerHTML = `<span class="dot" style="background:${info.color}"></span>${info.label}`;
   document.getElementById('detailNome').textContent = w.nome;
@@ -590,7 +562,6 @@ function openDetail(w){
   document.getElementById('detailRegione').textContent = w.regione;
   document.getElementById('detailPrezzo').textContent = w.prezzo || '—';
   document.getElementById('detailDesc').textContent = w.desc || '';
-  deleteBtn.style.display = w.custom ? 'block' : 'none';
   overlay.classList.add('show');
   document.getElementById('sheet').scrollTop = 0;
 }
@@ -598,59 +569,17 @@ function closeDetail(){ overlay.classList.remove('show'); }
 overlay.addEventListener('click', e=>{ if(e.target === overlay) closeDetail(); });
 closeBtn.addEventListener('click', closeDetail);
 
-deleteBtn.addEventListener('click', ()=>{
-  if(!currentWine || !currentWine.custom) return;
-  if(!confirm('Eliminare "' + currentWine.nome + '"?')) return;
-  custom = custom.filter(w => w !== currentWine);
-  saveCustom();
-  closeDetail();
-  refreshRegions();
-  render();
-});
-
-// ---- form aggiungi vino ----
-const formOverlay = document.getElementById('formOverlay');
-const fNome = document.getElementById('fNome');
-const fCantina = document.getElementById('fCantina');
-const fTipo = document.getElementById('fTipo');
-const fRegione = document.getElementById('fRegione');
-const fPrezzo = document.getElementById('fPrezzo');
-const fDesc = document.getElementById('fDesc');
-
-fTipo.innerHTML = Object.keys(TIPO_INFO).map(t=>`<option value="${t}">${TIPO_INFO[t].label}</option>`).join('');
-fRegione.innerHTML = REGIONI.map(r=>`<option value="${esc(r)}">${esc(r)}</option>`).join('');
-
-function openForm(){
-  [fNome,fCantina,fPrezzo,fDesc].forEach(el => el.value = '');
-  fTipo.value = 'rosso';
-  fRegione.value = 'Piemonte';
-  formOverlay.classList.add('show');
-  document.getElementById('formSheet').scrollTop = 0;
-}
-function closeForm(){ formOverlay.classList.remove('show'); }
-document.getElementById('addBtn').addEventListener('click', openForm);
-document.getElementById('formClose').addEventListener('click', closeForm);
-formOverlay.addEventListener('click', e=>{ if(e.target === formOverlay) closeForm(); });
-
-document.getElementById('saveWine').addEventListener('click', ()=>{
-  const nome = fNome.value.trim();
-  if(!nome){ fNome.focus(); return; }
-  custom.push({
-    nome, cantina: fCantina.value.trim(), tipo: fTipo.value, regione: fRegione.value,
-    prezzo: fPrezzo.value.trim(), desc: fDesc.value.trim(), custom: true
-  });
-  saveCustom();
-  closeForm();
-  refreshRegions();
-  render();
-});
-
 searchInput.addEventListener('input', render);
 
 buildFilters();
 render();
 
-// ---- offline shell (PWA) ----
+loadCustomWines().then(list => {
+  custom = list;
+  refreshRegions();
+  render();
+});
+
 if('serviceWorker' in navigator){
   navigator.serviceWorker.register('sw.js').catch(()=>{});
 }
