@@ -1,0 +1,126 @@
+# ==========================================================================
+# VINI.TXT — il database completo dell'app (fonte unica)
+# ==========================================================================
+# L'app legge QUESTO file per intero ad ogni avvio. Non ci sono vini
+# nascosti nel codice: se un vino non è qui sotto, non compare in app.
+#
+# Una riga per vino. Sei campi separati da " | " (spazio, barra, spazio):
+#
+#   Nome | Cantina | Tipo | Regione | Prezzo | Descrizione
+#
+# Tipo (esattamente uno di questi, minuscolo): bianco, rosato, rosso, bollicina, dolce
+# Regione: una regione italiana, scritta come preferisci (es. Piemonte, Liguria,
+#          Toscana, Sicilia...) — comparirà nel filtro esattamente come la scrivi,
+#          quindi usa sempre la stessa grafia se riusi una regione già presente.
+# Prezzo: testo libero, es. "12€ - 15€"
+# Descrizione: testo libero, può contenere qualunque cosa (anche il simbolo | )
+#
+# Le righe vuote e quelle che iniziano con # vengono ignorate: usale per note.
+#
+# Per aggiungere un vino: scendi in fondo al file e aggiungi una riga sul
+# modello di quelle già presenti. Salva/commit su GitHub, l'app la vedrà
+# alla prossima apertura.
+# ==========================================================================
+
+
+Chardonnay | Mezzacorona | bianco | Trentino Alto Adige | 5€ - 6€ | Il "base" per eccellenza. Pulito, semplice, onesto. Perfetto per un aperitivo senza pretese o per cucinare.
+Müller Thurgau | Kettmeir | bianco | Trentino Alto Adige | 8€ - 10€ | Bottiglia renana (alta) che fa scena. Profumo esplosivo di fiori. Piace a tutti, anche a chi non beve vino.
+Gewürztraminer | Cantina Toblino | bianco | Trentino Alto Adige | 9€ - 11€ | Biologico spesso reperibile in GDO. Aromatico, speziato, perfetto con cibo piccante o formaggi.
+Pinot Bianco | Colterenzio (Schreckbichl) | bianco | Trentino Alto Adige | 10€ - 12€ | Il bianco "da tutti i giorni" di lusso. Fresco, mela verde, super versatile.
+Sauvignon (Linea Classica) | St. Michael Eppan | bianco | Trentino Alto Adige | 11€ - 13€ | San Michele Appiano è una garanzia assoluta. Questo Sauvignon ha quel profumo di sambuco e foglia di pomodoro tipico. Top class.
+Gewürztraminer | Tramin | bianco | Trentino Alto Adige | 13€ - 15€ | Saliamo di livello. Tramin è la cantina regina del Gewürztraminer. Bottiglia importante, gusto intenso. Regalo perfetto.
+Ribolla Gialla | Tenuta Ca' Bolani | bianco | Friuli Venezia Giulia | 7€ - 9€ | La Ribolla va di moda. Questa è fresca, agrumata e si trova ovunque (spesso in offerta).
+Friulano (ex Tocai) | Cormòns | bianco | Friuli Venezia Giulia | 8€ - 10€ | Il vino della tradizione friulana. Mandorlato, secco. Da bere con il prosciutto crudo (obbligatorio).
+Pinot Grigio | Santa Margherita | bianco | Friuli Venezia Giulia | 9€ - 11€ | Un classico immortale. È il Pinot Grigio più famoso al mondo (gli americani impazziscono). Elegante e affidabile.
+Sauvignon | Fantinel (Borgo Tesis) | bianco | Friuli Venezia Giulia | 9€ - 11€ | Ottimo rapporto qualità/prezzo per un Sauvignon friulano molto tipico e vegetale.
+Bianco di Custoza | Zenato | bianco | Veneto | 6€ - 8€ | Sottovalutato. Zenato lavora benissimo. Fresco, leggero, da bere a secchiate d'estate.
+Soave Classico | Bolla | bianco | Veneto | 7€ - 9€ | Cantina storica. Il Soave è tornato di moda. Minerale, sapido, ottimo col pesce di lago o sushi.
+Lugana | Ca' Maiol | bianco | Lombardia | 11€ - 13€ | Il Lugana più famoso. Bottiglia inconfondibile (un po' schiacciata). Morbido, piacevole, fa sempre un figurone.
+Gavi di Gavi | La Scolca (Etichetta Bianca) | bianco | Piemonte | 12€ - 15€ | Il Gavi è il bianco nobile del Piemonte. La Scolca è la cantina che l'ha reso celebre. Secco, deciso, elegante.
+Roero Arneis | Blangé (Ceretto) | bianco | Piemonte | 18€ - 22€ | È il "vino dei VIP". Costoso per un bianco da GDO, ma è uno status symbol. Leggermente frizzantino, etichetta iconica. Da portare se vuoi fare colpo sicuro.
+Verdicchio dei Castelli di Jesi | Fazi Battaglia (Titulus) | bianco | Marche | 5€ - 7€ | L'anfora verde è iconica. È la storia d'Italia. Secchissimo, mandorlato, perfetto col pesce fritto. Costa niente, vale tanto.
+Verdicchio Classico | Umani Ronchi (Villa Bianchi) | bianco | Marche | 6€ - 8€ | Se non ti piace la bottiglia ad anfora, prendi questo. Umani Ronchi è una garanzia di pulizia e qualità nelle Marche.
+Orvieto Classico | Santa Cristina (Antinori) | bianco | Umbria | 6€ - 8€ | Dietro c'è la mano di Antinori. È un vino "facile", leggero, che bevi come l'acqua. Per pranzi veloci è il top.
+Frascati Superiore | Fontana Candida | bianco | Lazio | 5€ - 7€ | Il vino di Roma. Secco, sapido. Non è più il vinello da osteria di una volta, ora è fatto bene. Con la carbonara (o gricia) spacca.
+Pecorino | Cantina Tollo | bianco | Abruzzo | 6€ - 8€ | Il Pecorino va di moda perché ha struttura. Questo costa poco ed è bello "ciccio" in bocca.
+Passerina | Velenosi | bianco | Marche | 8€ - 10€ | Un vino floreale, gentile. Piace molto a chi non ama l'acidità troppo spinta. Velenosi lavora benissimo (etichetta molto curata).
+Trebbiano d'Abruzzo | Masciarelli (Linea Classica) | bianco | Abruzzo | 6€ - 8€ | Gianni Masciarelli ha rivoluzionato l'Abruzzo. Questo è il suo vino base ma ha una complessità incredibile per il prezzo. Best Buy assoluto.
+Falanghina del Sannio | Mastroberardino | bianco | Campania | 9€ - 11€ | Mastroberardino è il "Papà" dei vini campani. Una Falanghina da manuale: fresca, agrumata, perfetta con mozzarella e pesce.
+Fiano di Avellino | Feudi di San Gregorio | bianco | Campania | 12€ - 14€ | Bottiglia di design inconfondibile (alta, nera, etichetta minimal). Vino strutturato, sa di nocciola e fiori. Regalo perfetto.
+Greco di Tufo | La Guardiense (Janare) | bianco | Campania | 7€ - 9€ | Rapporto qualità/prezzo imbattibile per un Greco. Minerale, quasi salato.
+Chardonnay | Tormaresca | bianco | Puglia | 8€ - 10€ | Vuoi uno Chardonnay ma fatto al caldo del Sud? Questo è morbido, tropicale (ananas, banana). Piace facilissimo.
+Sauvignon (Linea Classica) | St. Michael Eppan | bianco | Trentino Alto Adige | 11€ - 13€ | San Michele Appiano è una garanzia assoluta. Questo Sauvignon ha quel profumo di sambuco e foglia di pomodoro tipico. Top class.
+Vermentino di Sardegna | Sella & Mosca (La Cala) | bianco | Sardegna | 5€ - 7€ | È IL Vermentino da battaglia. Costa poco, sa di mare e maestrale. Con gli spaghetti alle vongole è la morte sua.
+Vermentino di Sardegna | Argiolas (Costamolino) | bianco | Sardegna | 9€ - 11€ | Un gradino sopra. Più profumato, più intenso. Argiolas è il re della Sardegna. Se vuoi spendere quei 2 euro in più, li vale tutti.
+Grillo | Tasca d'Almerita (Regaleali Bianco) | bianco | Sicilia | 8€ - 10€ | Un classico siciliano. Bottiglia renana, etichetta storica. Fresco ma con quel tocco siciliano inconfondibile.
+Anthilia | Donnafugata | bianco | Sicilia | 10€ - 12€ | Il vino bianco siciliano più famoso. L'etichetta con la donna e i capelli al vento è un'opera d'arte. Portalo a cena e hai vinto.
+Bardolino Chiaretto | Zenato | rosato | Veneto | 7€ - 9€ | Zenato non sbaglia un colpo. Colore rosa pallido, gusto leggerissimo. Perfetto per l'aperitivo estivo.
+Bardolino Chiaretto | Bolla | rosato | Veneto | 5€ - 7€ | Si trova in ogni supermercato. Prezzo ridicolo per un vino onesto, pulito, da bere ghiacciato senza pensieri.
+Lagrein Rosato (Kretzer) | Mezzacorona (o Castel Firmian) | rosato | Trentino Alto Adige | 6€ - 8€ | Il Lagrein è un'uva potente, ma vinificato in rosa diventa una spremuta di frutti di bosco freschi. Ottimo coi salumi.
+Valtenesi Chiaretto (Roseri) | Ca' Maiol | rosato | Lombardia | 10€ - 12€ | La bottiglia "schiacciata" tipica di Ca' Maiol fa molta scena. È un rosato di lago, sapido, elegante. Regalo perfetto.
+RosaMara | Costaripa (Mattia Vezzola) | rosato | Lombardia | 12€ - 15€ | Qui siamo nell'Olimpo. Mattia Vezzola è il re dei rosati del Garda. Colore perla, gusto da ristorante stellato. Se vuoi fare l'esperto vero, porta questo.
+Santa Cristina Rosato | Antinori | rosato | Toscana | 6€ - 8€ | Il jolly. Bottiglia classica, marchio Antinori che rassicura tutti. Fruttato, semplice, non tradisce mai.
+Cipresseto | Antinori (Santa Cristina) | rosato | Toscana | 9€ - 11€ | Il fratellino più elegante. Bottiglia satinata/opaca molto bella al tatto. Molto "femminile" e delicato.
+Bolgheri Rosato (Scalabrone) | Guado al Tasso | rosato | Toscana | 14€ - 17€ | Vuoi bere Bolgheri (zona di vini da 200€) spendendo poco? Ecco la soluzione. Strutturato, potente. Ci mangi anche la carne bianca.
+Cerasuolo d'Abruzzo (Tralcetto) | Zaccagnini | rosato | Abruzzo | 8€ - 10€ | IL MITO. Quello col pezzetto di legno (tralcio) legato al collo. Lo riconoscono tutti. Colore "Cerasuolo" (ciliegia) intenso. È quasi un rosso. Spacca con la pizza.
+Cerasuolo d'Abruzzo | Masciarelli | rosato | Abruzzo | 7€ - 9€ | Se Zaccagnini è il lato "pop", Masciarelli è il lato "serio". Vino gastronomico, pulito, perfetto.
+Cerasuolo d'Abruzzo (Fantini) | Farnese | rosato | Abruzzo | 5€ - 7€ | Costa pochissimo e ha vinto premi su premi per il rapporto qualità/prezzo. Frutta esplosiva (fragola, lampone).
+Calafuria | Tormaresca | rosato | Puglia | 11€ - 13€ | È la STAR dei rosati italiani. Bottiglia in vetro lavorato bellissima, tappo in vetro (spesso). Portarlo a cena è status symbol. Negroamaro in purezza.
+Five Roses (Base) | Leone de Castris | rosato | Puglia | 9€ - 11€ | Il primo rosato imbottigliato in Italia (1943). Bere questo è bere la storia. Sapido, serio.
+Tramari | San Marzano | rosato | Puglia | 8€ - 10€ | Rosato di Primitivo. Morbido, piacione, etichetta "minimal chic". Va a ruba perché piace a chi odia l'acidità.
+Rosato del Salento | Notte Rossa | rosato | Puglia | 6€ - 8€ | Vale il doppio di quello che costa. Fresco ma con corpo. La scelta "budget" migliore del Sud.
+Rosa del Golfo | Rosa del Golfo | rosato | Puglia | 9€ - 11€ | Un classico salentino meno "commerciale" di Calafuria ma di grandissima qualità. Per chi vuole distinguersi dalla massa.
+Cirò Rosato | Librandi | rosato | Calabria | 5€ - 7€ | La Calabria che vince. Librandi è una garanzia. Vino fresco, sapido, ideale col piccante o con le fritture.
+Etna Rosato | Tornatore (o Planeta) | rosato | Sicilia | 14€ - 16€ | L'Etna è il trend del momento. Minerale, vulcanico, elegante. Costa un po' di più ma è classe pura.
+Regaleali Rosato | Tasca d'Almerita | rosato | Sicilia | 7€ - 9€ | Il rosato siciliano da manuale. Nerello Mascalese. Bottiglia renana. Semplice e perfetto.
+Corvo Rosa | Duca di Salaparuta | rosato | Sicilia | 4€ - 6€ | Il "Mercenario" della Sicilia. Costa niente, lo trovi ovunque, è onesto e fruttato. Per la grigliata numerosa è la salvezza.
+Barbera d'Asti "Le Orme" | Michele Chiarlo | rosso | Piemonte | 9€ - 11€ | Etichetta storica (quella con le figure stilizzate). Barbera succosa, acidità perfetta per pulire la bocca dopo salumi o pasta al ragù. È una garanzia.
+Dolcetto d'Alba | Prunotto (Antinori) | rosso | Piemonte | 8€ - 10€ | Prunotto è la cantina piemontese di Antinori. Vino vinoso, semplice, sincero. Il classico rosso da mettere in tavola tutti i giorni senza vergogna.
+Nebbiolo Langhe | Produttori del Barbaresco | rosso | Piemonte | 15€ - 18€ | IL TRUCCO SUPREMO. Questo è praticamente un Barbaresco declassato. Stessa uva, stessa mano, costa un terzo. Chi lo conosce ti stima all'istante.
+Barolo | Beni di Batasiolo | rosso | Piemonte | 18€ - 22€ | Trovare un Barolo "vero" sotto i 20€ è dura. Questo si trova spesso in GDO (Esselunga/Coop). Non è il Barolo della vita, ma è corretto, tipico e ha scritto "BAROLO" in etichetta. Per fare scena a basso costo funziona.
+Valtellina Superiore (Inferno/Sassella) | Nino Negri | rosso | Lombardia | 12€ - 15€ | Nebbiolo di montagna. Elegante, fine, meno potente del Barolo ma classe da vendere. Nino Negri è il re della Valtellina.
+Bonarda "C'era una volta" | Giorgi | rosso | Lombardia | 6€ - 8€ | Rosso frizzante e amabile. È il "guilty pleasure" (piacere colpevole). Con i salumi o la cotoletta è imbattibile. Bottiglia "cicciotta" e ruvida molto bella.
+Lambrusco Grasparossa | Cleto Chiarli (Vigneto Cialdini) | rosso | Emilia-Romagna | 6€ - 8€ | Dimentica la soda dolce da 2 euro. Questo è Lambrusco VERO. Scuro, schiuma viola, secco e fruttato. Pulisce la bocca dal grasso come nient'altro.
+Gutturnio Superiore | Cantina Valtidone | rosso | Emilia-Romagna | 4€ - 6€ | Barbera + Bonarda. Il vino da battaglia emiliano. Fermo, strutturato, costa niente e vale tanto.
+Valpolicella Ripasso | Sartori (Bottiglia con stemma) | rosso | Veneto | 10€ - 12€ | IL BABY AMARONE. Fatto ripassando il vino sulle bucce dell'Amarone. Prende potenza e gusto dolce/amaro, ma costa un quarto. Sartori ha una bottiglia pesante con stemma in vetro che fa figura imperiale.
+Campofiorin | Masi | rosso | Veneto | 11€ - 14€ | Un'istituzione. Masi ha inventato questo stile. Etichetta riconoscibile in tutto il mondo. Morbido, vellutato, speziato. Regalo "paracadute" (non sbagli mai).
+Bardolino Classico | Bolla | rosso | Veneto | 5€ - 7€ | Il rosso "estivo". Leggero, scarico, si può bere anche leggermente fresco. Se non vuoi il solito rosso pesante da 14 gradi.
+Cabernet Sauvignon | Santa Margherita | rosso | Veneto | 7€ - 9€ | Il Cabernet è internazionale, piace perché è erbaceo e deciso. Santa Margherita è garanzia di pulizia tecnica.
+Refosco dal Peduncolo Rosso | Fantinel | rosso | Friuli Venezia Giulia | 8€ - 10€ | Il rosso autoctono del Friuli. Rustico, tannico, sgarbato il giusto. Perfetto per carni alla griglia unte.
+Teroldego Rotaliano Riserva | Mezzacorona | rosso | Trentino Alto Adige | 8€ - 10€ | Etichetta nera e oro "Riserva". Sembra costare 25€. Il Teroldego è il "Principe del Trentino": frutti scuri, cioccolato, morbido. Best Buy assoluto.
+Lagrein | St. Michael Eppan (o Kettmeir) | rosso | Trentino Alto Adige | 10€ - 13€ | Rosso scuro, impenetrabile, profuma di viola e more. Strutturato ma vellutato. Se vuoi uscire dai soliti nomi e fare l'intenditore.
+Chianti Rufina Riserva "Nipozzano" | Frescobaldi | rosso | Toscana | 13€ - 16€ | È un'istituzione. C'è scritto "RISERVA", c'è lo stemma nobiliare Frescobaldi. Portarlo a cena significa dire "Non ho badato a spese" (anche se costa il giusto). Elegante, speziato.
+Santa Cristina Rosso | Antinori | rosso | Toscana | 7€ - 9€ | Il vino rosso più bevuto d'Italia. Sangiovese morbido (c'è un po' di Merlot). Non sbagli mai. Se sei indeciso, prendi lui.
+Morellino di Scansano | Fattoria dei Barbi | rosso | Toscana | 9€ - 11€ | L'alternativa "wild" al Chianti. Più caldo, più fruttato. La Maremma nel bicchiere. Perfetto con la carne alla griglia.
+Montepulciano d'Abruzzo "Tralcetto" | Zaccagnini | rosso | Abruzzo | 9€ - 11€ | Quello con il pezzo di legno vero (tralcio) legato al collo. Iconico. Rustico ma non troppo. Si porta a cena anche solo per l'estetica della bottiglia.
+Montepulciano d'Abruzzo | Masciarelli (Classico) | rosso | Abruzzo | 6€ - 8€ | Il Re dell'Abruzzo. Probabilmente il miglior rapporto qualità/prezzo d'Italia sui rossi. Intenso, pulito, sa di amarena.
+Rosso Piceno (Brecciarolo) | Velenosi | rosso | Marche | 8€ - 10€ | Marche. Montepulciano + Sangiovese. Etichetta molto curata. Vino "ciccio", morbido, che riempie la bocca.
+Syrah "Tellus" | Falesco (Famiglia Cotarella) | rosso | Lazio | 10€ - 12€ | Lazio. L'etichetta è famosa (spesso artistica). Il Syrah qui è speziato (pepe nero) e internazionale. Molto "cool".
+Primitivo di Manduria | Notte Rossa | rosso | Puglia | 7€ - 9€ (spesso in offerta) | Ormai un classico del nostro canale. Etichetta nera/oro pesante. Gusto di prugna e marmellata. Piace al 99% delle persone perché è morbido e caldo.
+Primitivo di Manduria "Talò" | San Marzano | rosso | Puglia | 10€ - 12€ | Se vuoi salire di livello rispetto al Notte Rossa. Bottiglia ancora più bella, gusto vanigliato. Sembra un vino da 30€.
+Salice Salentino Riserva | Leone de Castris | rosso | Puglia | 8€ - 10€ | La storia della Puglia. Negroamaro. Più serio del Primitivo, meno dolce, più speziato. Etichetta vintage bellissima.
+Aglianico (Re di More) | Mastroberardino | rosso | Campania | 10€ - 12€ | L'Aglianico è il "Barolo del Sud". Tannico, potente, longevo. Mastroberardino è garanzia. Da bere con arrosti pesanti.
+Aglianico del Vulture "Pipoli" | Vigneti del Vulture | rosso | Basilicata | 7€ - 9€ | Basilicata. Un Aglianico moderno, "domato", morbido e vanigliato. Piace facilissimo. Etichetta bianca pulita ed elegante.
+Nero d'Avola "Sedàra" | Donnafugata | rosso | Sicilia | 9€ - 11€ | Sicilia. Etichetta artistica meravigliosa (Donnafugata è imbattibile sul marketing). Il vino è un Nero d'Avola moderno: frutta rossa, spezie, niente puzza di stalla.
+Cannonau di Sardegna Riserva | Sella & Mosca | rosso | Sardegna | 8€ - 10€ | Sardegna. Rosso mattone, profuma di mirto e macchia mediterranea. Invecchiato in botte grande. Fa molto "vecchio stile" ma è buonissimo.
+Carignano del Sulcis "Grotta Rossa" | Cantina Santadi | rosso | Sardegna | 9€ - 11€ | Una chicca sarda che pochi conoscono. Caldo, sapido, sa di mare e liquirizia. Se lo porti, sembri un esperto che conosce le zone di nicchia.
+Trento DOC Brut | Rotari | bollicina | Trentino Alto Adige | 10€ - 12€ | Il Re del rapporto qualità/prezzo. Spesso in offerta. Fa 24 mesi sui lieviti come uno Champagne base. Elegante, cremoso. Best Buy assoluto.
+Trento DOC Millesimato | Altemasi | bollicina | Trentino Alto Adige | 12€ - 15€ | Bottiglia elegante con etichetta argentata. Secco, tagliente, pulitissimo. Per una cena di pesce è perfetto.
+Trento DOC Brut (Maximum o Base) | Ferrari | bollicina | Trentino Alto Adige | 16€ - 20€ | Il brand italiano più famoso nel mondo. Portare un Ferrari fa sempre fare bella figura ("Ah, hai preso il Ferrari!"). Garanzia di qualità standardizzata ma alta.
+Trento DOC Brut | Cesarini Sforza | bollicina | Trentino Alto Adige | 11€ - 13€ | L'alternativa "aquila blu". Ottimo Trento DOC, molto morbido e floreale. Spesso si trova a prezzi ottimi.
+Franciacorta '61 Brut | Berlucchi | bollicina | Lombardia | 16€ - 19€ | Iconico. L'etichetta col "61" gigante fa scena e vintage. È morbido, piacevole, non troppo acido. Piace a tutti.
+Franciacorta Cuvée Royale | Marchese Antinori (Tenuta Montenisa) | bollicina | Lombardia | 19€ - 23€ | Vuoi un Franciacorta "nobile"? Qui c'è lo stemma Antinori. Gusto raffinato, note di pesca bianca. Regalo importante.
+Franciacorta Brut | Contadi Castaldi | bollicina | Lombardia | 15€ - 18€ | Bottiglia molto particolare (collo corto e largo). Brand giovanile, vino fresco e dinamico. Molto "cool" per l'aperitivo.
+Oltrepò Pavese Metodo Classico (Pinot Nero) | Giorgi 1870 | bollicina | Lombardia | 12€ - 15€ | L'Oltrepò è la terza zona spumantistica d'Italia (sottovalutata). Pinot Nero in purezza. Struttura potente, quasi da tutto pasto.
+Alta Langa (Cuvée) | Cinzano | bollicina | Piemonte | 18€ - 22€ | Sì, Cinzano fa anche cose serie. La loro Alta Langa è sorprendente. Vintage, complessa. Per stupire lo snob che rideva del marchio.
+Valdobbiadene Prosecco Superiore (Etichetta Nera) | Villa Sandi | bollicina | Veneto | 9€ - 11€ | Villa Sandi lavora benissimo. Questa linea è elegante, nera, non sembra il solito Prosecco da discount.
+Valdobbiadene Prosecco Superiore | Carpenè Malvolti | bollicina | Veneto | 8€ - 10€ | Hanno inventato loro il Prosecco nell'800. Bere Carpenè vuol dire bere la storia e la tradizione. Secco il giusto.
+Valdobbiadene Prosecco Superiore (Cuvée di Boj) | Valdo | bollicina | Veneto | 9€ - 11€ | Una selezione speciale di Valdo. Bottiglia tozza e pesante. Molto più buono del Valdo base. Ottimo floreale.
+Prosecco DOC (Mo Collection) | Mionetto | bollicina | Veneto | 7€ - 9€ | Design moderno, etichetta gialla/arancio obliqua. Molto pop. Vino semplice ma corretto e pulito.
+Valdobbiadene Rive di Colbertaldo | Masottina | bollicina | Veneto | 11€ - 13€ | "Rive" significa che le uve vengono da una singola zona scoscesa (Cru). È il Prosecco di alta qualità. Se devi portare Prosecco a cena, porta un Rive.
+Ribolla Gialla Spumante | Fantinel | bollicina | Friuli Venezia Giulia | 8€ - 10€ | Stanchi del Prosecco? La Ribolla spumantizzata è la risposta. Freschissima, agrumata, pulisce la bocca che è un piacere.
+Müller Thurgau Spumante | Cavit | bollicina | Trentino Alto Adige | 5€ - 6€ | Il re delle feste low cost. Aromatico, profumato, costa niente. Se devi fare sprone per 20 persone, prendi questo e non sbagli.
+Moscato d'Asti | Vignaioli di Santo Stefano (Ceretto) | dolce | Piemonte | 12€ - 14€ | Il miglior Moscato in GDO. Bottiglia iconica bassa e allungata. Dolce ma non stucchevole, sa di salvia e pesca. Capolavoro.
+Moscato d'Asti | Prunotto | dolce | Piemonte | 10€ - 12€ | Altra garanzia piemontese. Fine, delicato. Perfetto con la crostata di frutta.
+Brachetto d'Acqui (Rosa Regale) | Banfi | dolce | Piemonte | 10€ - 12€ | Spumante rosso dolce! Sa di fragola e rosa. Con il cioccolato o i frutti di bosco è l'abbinamento della vita. Molto romantico (bottiglia trasparente che fa vedere il rosso).
+Asti Spumante (Vintage) | Fontanafredda | dolce | Piemonte | 7€ - 9€ | Dimentica l'Asti dozzinale. Fontanafredda fa una linea con etichetta a righe vintage bellissima. Dolce, classico, per la torta della nonna.
