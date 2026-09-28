@@ -1,6 +1,6 @@
 # 🍷 L'Arsenale — Database Vini
 
-PWA per consultare da smartphone i 101 vini dell'"Arsenale del Bandito", filtrabili per **tipologia** (bianco, rosato, rosso, bollicina, dolce) e **regione** italiana, con cantina, prezzo indicativo e descrizione per ciascuna etichetta.
+PWA per consultare da smartphone i vini dell'"Arsenale del Bandito", filtrabili per **tipologia** (bianco, rosato, rosso, bollicina, dolce) e **regione** italiana, con cantina, prezzo indicativo e descrizione per ciascuna etichetta.
 
 ## Demo
 
@@ -14,24 +14,28 @@ https://allerock.github.io/arsenale-vini/
 2. Tocca l'icona di condivisione
 3. "Aggiungi alla schermata Home"
 
-## Aggiungere un vino
+## Come funzionano i dati
 
-Non serve toccare `index.html`: basta modificare **`vini-custom.txt`** direttamente su GitHub (anche da telefono, con l'editor web — nessun token necessario, solo il login GitHub):
+**`vini.txt` è l'unica fonte di dati.** L'app non ha nessun vino scritto nel codice: ad ogni avvio scarica quel file, lo legge riga per riga e mostra quello che trova. Se il file è vuoto, l'app è vuota.
 
-1. Apri `vini-custom.txt` nella repo
+## Aggiungere (o modificare) un vino
+
+Basta modificare **`vini.txt`** direttamente su GitHub (anche da telefono, con l'editor web — nessun token necessario, solo il login GitHub):
+
+1. Apri `vini.txt` nella repo
 2. Tocca la matita (Edit)
-3. Aggiungi una riga in fondo seguendo il formato spiegato nelle istruzioni del file stesso:
+3. Aggiungi/modifica una riga seguendo il formato spiegato nelle istruzioni in cima al file stesso:
    `Nome | Cantina | Tipo | Regione | Prezzo | Descrizione`
 4. Commit diretto su `main`
 
-L'app li legge al volo ad ogni apertura (fetch di `vini-custom.txt`), niente da ricompilare o ripubblicare.
+L'app lo rilegge tutto alla prossima apertura, niente da ricompilare o ripubblicare.
 
 ## Struttura
 
 | File | Contenuto |
 |---|---|
-| `index.html` | App (markup, stile, catalogo dei 101 vini e logica) |
-| `vini-custom.txt` | Vini aggiunti a mano, letti a runtime dall'app |
+| `index.html` | App (markup, stile, logica) — nessun dato vino incorporato |
+| `vini.txt` | **Database completo**, letto a runtime dall'app |
 | `manifest.json` | Manifest PWA (nome, icone, tema) |
 | `sw.js` | Service worker per l'uso offline (cache versionata) |
 | `apple-touch-icon.png`, `icon-192.png`, `icon-512.png`, `icon-maskable-512.png` | Icone dell'app (sfondo pieno, senza trasparenze) |
@@ -40,4 +44,4 @@ L'app li legge al volo ad ogni apertura (fetch di `vini-custom.txt`), niente da 
 
 Nessuna build necessaria: sono file statici serviti direttamente da GitHub Pages.
 
-Ad ogni modifica di `index.html`, `manifest.json` o delle icone ricordarsi di aggiornare `CACHE_NAME` in `sw.js`, altrimenti chi ha già installato l'app potrebbe continuare a vedere la versione in cache. Modificare solo `vini-custom.txt` non richiede il bump: l'app lo scarica sempre a parte.
+Ad ogni modifica di `index.html`, `manifest.json` o delle icone ricordarsi di aggiornare `CACHE_NAME` in `sw.js`, altrimenti chi ha già installato l'app potrebbe continuare a vedere la versione in cache. Modificare solo `vini.txt` non richiede il bump: l'app lo scarica sempre a parte, senza passare dalla cache del service worker in modo persistente.
