@@ -2,7 +2,7 @@
 
 PWA per consultare da smartphone i 101 vini dell'"Arsenale del Bandito", filtrabili per **tipologia** (bianco, rosato, rosso, bollicina, dolce) e **regione** italiana, con cantina, prezzo indicativo e descrizione per ciascuna etichetta.
 
-Nessun salvataggio dati: è un database statico di sola consultazione.
+I vini del PDF sono inclusi nell'app. Con il pulsante **+** in alto si possono aggiungere vini personali (salvati solo su quel dispositivo, in `localStorage`) ed eliminarli dalla loro scheda.
 
 ## Demo
 
@@ -25,7 +25,7 @@ https://<utente>.github.io/<repo>/
 | `index.html` | App (markup, stile, dati e logica) |
 | `manifest.json` | Manifest PWA (nome, icone, tema) |
 | `sw.js` | Service worker per l'uso offline (cache versionata) |
-| `icon-192.png`, `icon-512.png`, `icon-maskable-512.png` | Icone dell'app |
+| `apple-touch-icon.png`, `icon-192.png`, `icon-512.png`, `icon-maskable-512.png` | Icone dell'app (sfondo pieno, senza trasparenze) |
 
 ## Sviluppo
 
