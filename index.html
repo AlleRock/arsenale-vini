@@ -364,6 +364,7 @@ let WINES = []; // caricato da vini.txt all'avvio: fonte unica dei dati
 
 // ---- lettura vini.txt (unica fonte dati, editabile a mano su GitHub) ----
 function parseWinesText(text){
+  let index = 0;
   return text.split('\n')
     .map(l => l.trim())
     .filter(l => l && !l.startsWith('#'))
@@ -377,18 +378,31 @@ function parseWinesText(text){
       const prezzo = parts[4].trim();
       const desc = parts.slice(5).join('|').trim();
       if(!nome || !TIPO_INFO[tipo] || !regione) return null;
-      return { nome, cantina, tipo, regione, prezzo, desc };
+      return { index: index++, nome, cantina, tipo, regione, prezzo, desc };
     })
     .filter(Boolean);
 }
 
-async function init(){
+async function fetchWineCatalog(url){
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 6000);
   try{
-    const res = await fetch('vini.txt', {cache:'no-store'});
+    const res = await fetch(url, {cache:'no-store', signal:controller.signal});
     if(!res.ok) throw new Error('HTTP ' + res.status);
     const text = await res.text();
-    WINES = parseWinesText(text);
-    if(WINES.length === 0) throw new Error('vini.txt vuoto o senza righe valide');
+    const wines = parseWinesText(text);
+    if(wines.length === 0) throw new Error('vini.txt vuoto o senza righe valide');
+    return wines;
+  }finally{
+    clearTimeout(timeout);
+  }
+}
+
+async function init(){
+  try{
+    // Evita la copia obsoleta anche durante il passaggio dal vecchio worker.
+    try{ WINES = await fetchWineCatalog('vini.txt?refresh=' + Date.now()); }
+    catch(e){ WINES = await fetchWineCatalog('vini.txt'); }
     buildFilters();
     render();
     loadingScreen.classList.add('hidden');
@@ -449,7 +463,7 @@ function render(){
 
   listEl.innerHTML = results.map(w => {
     const info = TIPO_INFO[w.tipo];
-    const realIdx = WINES.indexOf(w);
+    const realIdx = w.index;
     return `
     <div class="wine-card" style="border-left-color:${info.color}" data-idx="${realIdx}">
       <div class="info">
